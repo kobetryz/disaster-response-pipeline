@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 logging.basicConfig(level=logging.INFO,  # Set logging level
                     format='%(asctime)s - %(levelname)s - %(message)s')  # Customize log format
 
-# path information? glob?
+#FIXME path information? glob?
 def data_processing():
     messages = pd.read_csv('data/messages.csv')
     categories = pd.read_csv('data/categories.csv')
@@ -41,8 +41,8 @@ def data_processing():
 
     
 def save_date_to_db(df):
-    engine = create_engine('sqlite:///InsertDatabaseName.db')
-    df.to_sql('InsertTableName', engine, index=False)
+    engine = create_engine('sqlite:///DisasterResponse.db')
+    df.to_sql('Messages_Categories', engine, index=False)
     logging.info(f"Data stored in db")
 
 
