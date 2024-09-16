@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO,  # Set logging level
                     format='%(asctime)s - %(levelname)s - %(message)s')  # Customize log format
 
 #FIXME path information? glob?
-def data_processing():
+def data_pre_processing():
     messages = pd.read_csv('data/messages.csv')
     categories = pd.read_csv('data/categories.csv')
 
@@ -35,6 +35,13 @@ def data_processing():
 
     # deduplicate
     df.drop_duplicates(keep='first', inplace=True)
+    # remove nan
+    df.dropna(inplace=True)
+
+    # remove non english text
+
+    df = df[df.related != 2]
+
     logging.info(f"Data Cleaning Successful")
 
     return df
@@ -42,14 +49,15 @@ def data_processing():
     
 def save_date_to_db(df):
     engine = create_engine('sqlite:///DisasterResponse.db')
-    df.to_sql('Messages_Categories', engine, index=False)
+    df.to_sql('Messages', engine, index=False, if_exists = 'replace')
     logging.info(f"Data stored in db")
 
+# def further_processing(df):
+#     df.messages = df
 
 def main():
-    df = data_processing()
+    df = data_pre_processing()
     save_date_to_db(df)
-
 
 if __name__ == "__main__":
     main()
